@@ -1,0 +1,17 @@
+# Credentialed PhysioNet files and the generated synthetic copy.
+data/
+
+# Trained models, embeddings, metrics, and plots from a local run.
+outputs/
+
+# Python environments and caches.
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Local editor files.
+.DS_Store
+Thumbs.db

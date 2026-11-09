@@ -1,0 +1,80 @@
+# One file for paths, cohort size, and training settings.
+# data.source: "synthetic" runs the fake dataset. Change it to "mimic"
+# only after the credentialed files are in the folders below.
+
+seed: 42
+
+runtime:
+  smoke: false
+
+data:
+  source: synthetic
+  mimic_iv_dir: data/mimiciv
+  mimic_cxr_dir: data/mimic-cxr-jpg
+  mimic_note_dir: data/mimic-iv-note
+  synthetic_dir: data/synthetic
+
+cohort:
+  max_admissions: 8000
+  window_hours: 24
+  # Long notes are shortened before they are saved. The text model then
+  # keeps the first 512 tokens. Most recent prior notes are placed first.
+  max_chars_per_note: 3000
+  max_note_characters: 20000
+  train_fraction: 0.70
+  val_fraction: 0.15
+  test_fraction: 0.15
+  output_path: outputs/cohort/cohort.csv.gz
+
+synthetic:
+  n_subjects: 160
+  positive_rate: 0.25
+  image_size: 64
+
+image:
+  size: 224
+  batch_size: 8
+  epochs: 4
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+  num_workers: 0
+  pretrained: true
+  backbones:
+    - name: densenet121
+      timm_name: densenet121
+    - name: vit
+      timm_name: vit_base_patch16_224
+
+text:
+  model_name: emilyalsentzer/Bio_ClinicalBERT
+  max_length: 512
+  batch_size: 4
+  epochs: 3
+  learning_rate: 0.00002
+  weight_decay: 0.01
+
+tabular:
+  n_estimators: 200
+  max_depth: 3
+  learning_rate: 0.05
+  early_stopping_rounds: 20
+
+fusion:
+  n_estimators: 200
+  max_depth: 3
+  learning_rate: 0.05
+  early_stopping_rounds: 20
+
+explain:
+  shap_samples: 200
+  gradcam_images: 8
+  n_patients: 3
+
+outputs:
+  inspection: outputs/data_inspection.md
+  funnel: outputs/cohort/funnel.txt
+  checkpoints: outputs/checkpoints
+  embeddings: outputs/embeddings
+  metrics: outputs/metrics
+  explain: outputs/explain
+  val_scores: outputs/metrics/val_scores.json
